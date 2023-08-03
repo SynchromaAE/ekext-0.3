@@ -208,41 +208,41 @@
 #X connect 32 0 33 0;
 #X restore 283 280 pd unpack-multiply-and-distribute;
 #X obj 283 304 vsl 12 156 0 155 0 0 empty empty 0 4 9 1 10 -262144
--1 -1 1000 1;
+-1 -1 0 1;
 #X obj 298 304 vsl 12 156 0 155 0 0 empty empty 1 4 9 1 10 -262144
--1 -1 8200 1;
+-1 -1 0 1;
 #X obj 313 304 vsl 12 156 0 155 0 0 empty empty 2 4 9 1 10 -262144
--1 -1 7800 1;
+-1 -1 0 1;
 #X obj 328 304 vsl 12 156 0 155 0 0 empty empty 3 4 9 1 10 -262144
--1 -1 4300 1;
+-1 -1 0 1;
 #X obj 343 304 vsl 12 156 0 155 0 0 empty empty 4 4 9 1 10 -262144
--1 -1 8500 1;
+-1 -1 0 1;
 #X obj 358 304 vsl 12 156 0 155 0 0 empty empty 5 4 9 1 10 -262144
--1 -1 9900 1;
+-1 -1 0 1;
 #X obj 373 304 vsl 12 156 0 155 0 0 empty empty 6 4 9 1 10 -262144
--1 -1 4400 1;
+-1 -1 0 1;
 #X obj 388 304 vsl 12 156 0 155 0 0 empty empty 7 4 9 1 10 -262144
--1 -1 1800 1;
+-1 -1 0 1;
 #X obj 413 304 vsl 12 156 0 155 0 0 empty empty 8 4 9 1 10 -262144
--1 -1 9900 1;
+-1 -1 0 1;
 #X obj 428 304 vsl 12 156 0 155 0 0 empty empty 9 4 9 1 10 -262144
--1 -1 600 1;
+-1 -1 0 1;
 #X obj 443 304 vsl 12 156 0 155 0 0 empty empty 10 0 9 1 10 -262144
--1 -1 6800 1;
+-1 -1 0 1;
 #X obj 458 304 vsl 12 156 0 155 0 0 empty empty 11 0 9 1 10 -262144
--1 -1 5600 1;
+-1 -1 0 1;
 #X obj 473 304 vsl 12 156 0 155 0 0 empty empty 12 0 9 1 10 -262144
--1 -1 9900 1;
+-1 -1 0 1;
 #X obj 488 304 vsl 12 156 0 155 0 0 empty empty 13 0 9 1 10 -262144
--1 -1 2700 1;
+-1 -1 0 1;
 #X obj 503 304 vsl 12 156 0 155 0 0 empty empty 14 0 9 1 10 -262144
--1 -1 8900 1;
+-1 -1 0 1;
 #X obj 518 304 vsl 12 156 0 155 0 0 empty empty 15 0 9 1 10 -262144
--1 -1 1100 1;
+-1 -1 0 1;
 #X msg 366 144 outList 0;
 #X msg 296 134 outList -1;
-#X floatatom 137 88 5 0 16 2 slot #0-setSlot -;
-#X msg 137 109 setSlot \$1;
+#X floatatom 137 78 5 0 16 2 slot #0-setSlot -;
+#X msg 137 119 setSlot \$1;
 #X floatatom 51 212 5 0 0 0 index - -;
 #X floatatom 84 331 0 0 0 0 value - -;
 #X floatatom 140 363 5 0 0 0 slot - -;
@@ -313,10 +313,13 @@
 #X connect 10 0 4 0;
 #X restore 51 233 pd change;
 #X obj 87 212 tgl 15 0 empty \$0-setSlotTgl setSlot 17 7 1 10 -262144
--1 -1 1 1;
+-1 -1 0 1;
 #X obj 115 233 tgl 15 0 empty \$0-outListTgl outList 17 7 1 10 -262144
--1 -1 1 1;
+-1 -1 0 1;
 #X obj 259 107 r \$0-outList;
+#X obj 137 99 t f f;
+#X msg 334 31 clearSlot;
+#X msg 567 90 addVal 5 0.86;
 #X connect 0 0 30 0;
 #X connect 0 1 31 0;
 #X connect 0 2 32 0;
@@ -350,8 +353,7 @@
 #X connect 9 15 25 0;
 #X connect 26 0 0 0;
 #X connect 27 0 0 0;
-#X connect 28 0 29 0;
-#X connect 28 0 53 1;
+#X connect 28 0 60 0;
 #X connect 29 0 0 0;
 #X connect 30 0 56 0;
 #X connect 42 0 0 0;
@@ -376,3 +378,7 @@
 #X connect 57 0 56 1;
 #X connect 58 0 56 2;
 #X connect 59 0 54 0;
+#X connect 60 0 53 0;
+#X connect 60 1 29 0;
+#X connect 61 0 0 0;
+#X connect 62 0 0 0;

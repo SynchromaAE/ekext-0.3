@@ -106,7 +106,7 @@ void markovChains_bang(t_markovChains *x)
       if(x->thisTot < 1 && x->thisTot > 0) x->thisRand = x->thisRand / x->thisTot;
       for(i=0; i < x->thisLen; i++)
 	{
-	  bVal = atom_getfloatarg(x->thisOffset + i + x->noZero, ARRAYSIZE, x->map.boundary);
+	  bVal = atom_getfloatarg(x->thisOffset + i, ARRAYSIZE, x->map.boundary);
 	  bVal = bVal / x->thisTot;
 	  if(x->thisRand > lastB && x->thisRand < bVal)
 	    {
@@ -115,6 +115,8 @@ void markovChains_bang(t_markovChains *x)
 	    }
 	  lastB = bVal;
 	}
+      if(x->noZero)
+	  x->thisSlot += 1;
       outlet_float(x->randOut, x->thisRand);
       outlet_float(x->slot, (t_float)x->thisSlot);
       outlet_float(x->value, x->lastBound);
@@ -133,6 +135,8 @@ void markovChains_bang(t_markovChains *x)
 	    }
 	  lastB = bVal;
 	}
+      if(x->noZero)
+	  x->thisSlot += 1;
       outlet_float(x->randOut, x->thisRand);
       outlet_float(x->slot, (t_float)x->thisSlot);
       outlet_float(x->value, x->lastBound);
@@ -156,6 +160,8 @@ void markovChains_bang(t_markovChains *x)
 	    }
 	  lastB = bVal;
 	}
+      if(x->noZero)
+	  x->thisSlot += 1;
       outlet_float(x->randOut, x->thisRand);
       outlet_float(x->slot, (t_float)x->thisSlot);
       outlet_float(x->value, x->lastBound);
@@ -207,6 +213,8 @@ void markovChains_float(t_markovChains *x, t_floatarg f) // go to a slot and mak
 	      lastB = bVal;
 	    }
 	}
+      if(x->noZero)
+	  x->thisSlot += 1;
       outlet_float(x->randOut, x->thisRand);
       outlet_float(x->slot, (t_float)x->thisSlot);
       outlet_float(x->value, x->lastBound);
@@ -307,6 +315,39 @@ void markovChains_addSeq(t_markovChains *x, t_symbol *s, int argc, t_atom *argv)
   else post ("markovChains: sequence too short - minimum length = 2");
 }
 
+void markovChains_addVal(t_markovChains *x, t_floatarg i, t_floatarg f)
+{
+  t_int index = (t_int)i;
+  t_int j;
+  t_float val1;
+  SETFLOAT(&x->map.values[x->thisOffset + index], f);
+  SETFLOAT(&x->map.listOut[index], f);
+  if(index >= 0 && index <= 15)
+    {
+      x->addLen = 15;
+      x->addTot = 0;
+      // addSeq code goes in here
+      for(i=0; i< x->addLen; i++)  
+	{
+	  val1 = f;
+	  val1 = fabs(val1);
+	  x->addTot += val1;
+	  x->map.current[x->thisOffset + index] = index;
+	  if(x->addTot > 0)
+	    {
+	      x->normValue = 1 / x->addTot;
+	      SETFLOAT(&x->map.boundary[x->thisOffset + index], x->addTot);
+	    }
+	  //	  if (x->addOffset + x->addLen * 2 < 1023)
+	  //	    SETFLOAT(&x->map.values[x->addOffset + index + x->maxLen], 1);
+	}
+      if(x->addTot > 0)
+        SETFLOAT(&x->map.normalize[x->thisSlot], 1 / x->normValue);
+      outlet_list(x->listValues, gensym("list"), x->thisLen, x->map.listOut);
+    }
+  else post("index out of range: %d", index);
+}
+
 void markovChains_noZeros(t_markovChains *x, t_floatarg f)
 {
   if(f == 0)
@@ -378,6 +419,19 @@ void markovChains_setSlot(t_markovChains *x, t_floatarg f)
       x->normValue = atom_getfloatarg(x->thisSlot, HALFARRAY, x->map.normalize);
       x->thisTot = atom_getfloatarg(x->thisOffset + x->thisLen - 1, ARRAYSIZE, x->map.boundary);
     }
+}
+
+void markovChains_clearSlot(t_markovChains *x)
+{
+  int i;
+  x->thisOffset = x->map.starts[x->thisSlot];
+  for(i = 0 ; i < x->thisLen ; i++)
+    {
+      SETFLOAT(&x->map.values[x->thisOffset + i], 0);
+      SETFLOAT(&x->map.listOut[i], 0);
+    }
+  SETFLOAT(&x->map.normalize[x->thisSlot], 100);
+  outlet_list(x->listValues, gensym("list"), x->thisLen, x->map.listOut);
 }
 
 void markovChains_autoNorm(t_markovChains *x, t_floatarg f)
@@ -518,5 +572,6 @@ void markovChains_setup(void)
   class_addmethod(markovChains_class, (t_method)markovChains_debug, gensym("debug"), A_DEFFLOAT, 0);
   class_addmethod(markovChains_class, (t_method)markovChains_clear, gensym("clear"), A_DEFFLOAT, 0);
   class_addmethod(markovChains_class, (t_method)markovChains_noZero, gensym("noZero"), A_DEFFLOAT, 0);
-  
+  class_addmethod(markovChains_class, (t_method)markovChains_addVal, gensym("addVal"), A_DEFFLOAT, A_DEFFLOAT, 0);
+  class_addmethod(markovChains_class, (t_method)markovChains_clearSlot, gensym("clearSlot"), A_DEFFLOAT, 0);
 }
