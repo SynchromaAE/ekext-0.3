@@ -1,0 +1,56 @@
+#N canvas 9 89 582 524 10;
+#X declare -path ekext;
+#X obj 78 371 scalefilter;
+#X floatatom 21 339 5 0 0 0 - - -;
+#X floatatom 152 335 5 0 0 2 instances - -;
+#X obj 21 266 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
+1;
+#X obj 21 310 random 12;
+#X floatatom 36 406 5 0 0 3 match_through - -;
+#X msg 146 300 zero 6;
+#X floatatom 146 416 5 0 0 3 nomatch - -;
+#X obj 96 467 print scale;
+#X msg 109 237 set 0 1 3 4 5 7 9 10;
+#X msg 134 279 reset;
+#X msg 122 258 get;
+#X obj 21 288 metro 320;
+#X text 15 14 Scalefilter takes numbers (e.g. pitch classes) and matches
+them to a pre-determined scale. A limited number of instances of the
+same number are allowed through \, and once this number of instances
+have been recorded for every element of the scale \, the object outputs
+a bang on its right outlet.;
+#X text 19 94 If no scale is specified with the [set( message \, the
+object is populated with unique values up to the buffer size specified
+with the creation argument or the [zero n( message. Once the buffer
+is full the scale is set \, and new values are only passed through
+if they exist within the scale and the maximum number of instances
+has not been reached.;
+#X text 262 235 <--- set the elements of a scale to match;
+#X obj 247 373 bng 15 250 50 0 empty empty all_members_full 17 7 0
+10 -262144 -1 -1;
+#X floatatom 219 408 5 0 0 3 scale_length - -;
+#X text 155 258 <--- output the scale from the 2nd outlet;
+#X text 182 280 <--- reset the number of instances to 0 for all values
+;
+#X text 198 300 <--- create a blank scale with n members;
+#X text 194 333 <--- number of times to allow a member through;
+#X obj 21 239 t b b;
+#X obj 21 218 loadbang;
+#X obj 359 199 declare -path ekext;
+#X connect 0 0 5 0;
+#X connect 0 1 8 0;
+#X connect 0 2 7 0;
+#X connect 0 3 17 0;
+#X connect 0 4 16 0;
+#X connect 1 0 0 0;
+#X connect 2 0 0 1;
+#X connect 3 0 12 0;
+#X connect 4 0 1 0;
+#X connect 6 0 0 0;
+#X connect 9 0 0 0;
+#X connect 10 0 0 0;
+#X connect 11 0 0 0;
+#X connect 12 0 4 0;
+#X connect 22 0 3 0;
+#X connect 22 1 9 0;
+#X connect 23 0 22 0;

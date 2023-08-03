@@ -1,0 +1,239 @@
+#N canvas 228 185 738 504 10;
+#X obj 94 346 sieve;
+#X msg 147 276 set 2 1;
+#X msg 198 276 set 7 0.86;
+#X msg 148 198 map 0 1 0 0 0 3 0 2 0 0.7;
+#X msg 147 229 get 0;
+#X msg 147 250 get 1;
+#X floatatom 37 384 5 0 0 0 - - -;
+#X floatatom 81 382 5 0 0 0 - - -;
+#X obj 129 379 print MAPOUT;
+#X obj 218 379 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
+-1;
+#X obj 218 397 print EXACT;
+#X obj 37 419 print MAPPED;
+#X obj 81 399 print VALUE;
+#X msg 147 324 clear;
+#X text 189 228 get map;
+#X text 189 249 get inverted map;
+#X floatatom 309 406 5 0 0 0 - - -;
+#X floatatom 350 406 5 0 0 0 - - -;
+#X obj 341 363 prepend map;
+#X obj 395 405 bng 15 250 50 0 empty empty empty 0 -6 0 8 -262144 -1
+-1;
+#X text 189 323 clear object;
+#X text 277 277 set [location \, value];
+#X msg 147 297 set 2 0;
+#X text 201 297 unset location;
+#X text 332 196 set map;
+#X floatatom 35 318 5 0 0 0 - - -;
+#X obj 29 184 vradio 15 1 0 4 empty empty mode 0 -6 0 10 -262144 -1
+-1 0;
+#X msg 29 248 mode \$1;
+#X text 62 170 : 0=exact \, 1=nearest \, 2=shunt up \, 3=shunt down
+;
+#X obj 341 383 sieve;
+#X obj 22 19 sieve;
+#X text 62 19 takes integers and maps them to floats if they are set.
+;
+#X text 63 32 in the default mode (mode 0) integers without an associated
+float are blocked \, so a map will sieve the input.;
+#X text 64 60 mode 1 forces the sieve to choose the nearest index \,
+so that inputs are sent to alternative outputs. The rightmost output
+bangs only if the input is exact.;
+#X text 64 101 In modes 2 and 3 the sieve chooses the next map up or
+the next map down. If the input is higher than the highest mapped integer
+in mode 2 \, or lower than the lowest in mode 3 \, then the shunting
+is wrapped and the lowest or highest is chosen respectively.;
+#X text 294 330 when the inverted map is sent to another;
+#X text 298 344 sieve object \, the input is segregated.;
+#X text 38 440 Polyphony control objects by Ed Kelly \, November 2006
+;
+#X text 411 439 See also;
+#X obj 476 438 polymap;
+#X obj 476 417 polystat;
+#X obj 532 438 maskxor;
+#X obj 410 181 loadbang;
+#X obj 410 233 delay 50;
+#N canvas 3 89 596 300 register_functions 0;
+#X obj 99 208 sieve;
+#X msg 99 83 map 0 1 2 4 5 6 7 9 10 11 12;
+#X obj 99 47 loadbang;
+#X msg 157 166 get 0;
+#X msg 254 125 delete 8;
+#X msg 255 167 shunt 5;
+#X obj 194 166 delay 0;
+#X msg 194 149 bang;
+#X msg 254 241 insert 7 100;
+#X msg 256 203 shift 5;
+#X obj 125 269 print REGMAP;
+#X floatatom 38 166 5 0 0 0 - - -;
+#X floatatom 35 257 5 0 0 0 - - -;
+#X msg 160 57 map 1 1 1 1 1 1 1 1 1 1 1 1;
+#X text 324 124 removes an element from the array;
+#X text 318 166 removes an element from the array and;
+#X text 319 178 subtracts 1 from subsequent elements;
+#X text 320 201 shifts elements downstream \, adding 1;
+#X text 319 213 to each element \, from a specific point;
+#X text 349 242 inserts an element into the array;
+#X connect 0 0 12 0;
+#X connect 0 2 10 0;
+#X connect 1 0 0 0;
+#X connect 2 0 1 0;
+#X connect 3 0 0 0;
+#X connect 4 0 0 0;
+#X connect 4 0 7 0;
+#X connect 5 0 0 0;
+#X connect 5 0 7 0;
+#X connect 6 0 3 0;
+#X connect 7 0 6 0;
+#X connect 8 0 0 0;
+#X connect 8 0 7 0;
+#X connect 9 0 0 0;
+#X connect 9 0 7 0;
+#X connect 11 0 0 0;
+#X connect 13 0 0 0;
+#X restore 325 298 pd register_functions;
+#N canvas 379 254 494 344 META 0;
+#X text 12 185 HELP_PATCH_AUTHORS Ed Kelly. Revised by Jonathan Wilkes
+for Pd-extended 0.42 to conform to the PDDP template.;
+#X text 12 25 LICENSE GPL v3;
+#X text 12 165 AUTHOR Ed Kelly <morph_2016@yahoo.co.uk>;
+#X text 12 5 KEYWORDS signal needs_work (description);
+#X text 12 45 DESCRIPTION needs a description;
+#X text 12 65 INLET_0 signal;
+#X text 12 85 INLET_1 float;
+#X text 12 105 INLET_2 float;
+#X text 12 125 OUTLET_0 list;
+#X text 12 145 OUTLET_1 list;
+#X restore 538 474 pd META;
+#N canvas 288 89 1015 622 markovChains 1;
+#X obj 108 411 sieve;
+#X msg 108 302 bang;
+#X msg 301 321 anneal 100;
+#X floatatom 57 444 5 0 0 3 location - -;
+#X floatatom 143 444 5 0 0 3 probability - -;
+#X floatatom 64 302 5 0 9 0 - - -;
+#X msg 297 377 weight 4 0.5;
+#X msg 316 436 markov;
+#X text 298 229 ...so we need another sieve to hold the markov probablities
+for each group \, not the probabilities themselves but al1 the positive
+and negative weights \, for a group to repeat. The rest can be random
+values \, but if we first anneal and then weight the array \, we can
+use the markov function in the sieve object to jump between groups.
+;
+#X msg 387 377 weight whichSlotToPrefer weight;
+#X text 365 430 generates a random slot based on the total value of
+the list elements (the aim) and decides on which slot to output in
+terms of its probability (based on annealing and weighting);
+#X text 82 20 these functions add Markov-chains to sieve \, but also
+to weight and anneal the probabilities. The pseudo-random number generator
+is within the sieve object.;
+#X text 85 65 instead of just storing an array of numbers (which it
+still does) the VALUE is a probability that the next value generated
+by the markov message will be the same \, but realtive to all the other
+possible slots.;
+#X text 95 120 the list can be "annealed" meaning that the total of
+all values will ad up to an "aimed" value \, so you can set a whole
+lot of random values as the array and then "anneal" them to a specified
+sum-value;
+#X text 110 172 that means you can generate Markov chains - where the
+probability of one value is based on how much of the range of all values
+represents the probability;
+#N canvas 3 89 385 326 init 0;
+#X obj 48 104 until;
+#X obj 48 126 t b b;
+#X obj 48 148 cup;
+#X obj 48 39 loadbang;
+#X obj 48 60 t b b;
+#X msg 100 124 0;
+#X obj 86 146 random 500;
+#X obj 48 170 pack f f;
+#X obj 48 192 list prepend set;
+#X obj 48 214 list trim;
+#X msg 48 82 10;
+#X msg 154 192 clear;
+#N canvas 3 89 450 300 bugs 0;
+#X msg 125 123 debug 1;
+#X msg 145 90 debug 2;
+#X msg 161 63 debug 3;
+#X msg 186 33 debug 4;
+#X obj 135 174 outlet;
+#X connect 0 0 4 0;
+#X connect 1 0 4 0;
+#X connect 2 0 4 0;
+#X connect 3 0 4 0;
+#X restore 110 233 pd bugs;
+#X obj 48 270 outlet;
+#X obj 136 43 inlet;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;
+#X connect 1 1 6 0;
+#X connect 2 0 7 0;
+#X connect 3 0 4 0;
+#X connect 4 0 10 0;
+#X connect 4 1 5 0;
+#X connect 4 1 11 0;
+#X connect 5 0 2 0;
+#X connect 6 0 7 1;
+#X connect 7 0 8 0;
+#X connect 8 0 9 0;
+#X connect 9 0 13 0;
+#X connect 10 0 0 0;
+#X connect 11 0 13 0;
+#X connect 12 0 13 0;
+#X connect 14 0 4 0;
+#X restore 108 325 pd init;
+#X text 371 321 -->;
+#X text 399 314 all array elements will be adjusted to add-up to this
+value. This is caled the "aim" of annealing. In this case all values
+will add up to 100 \, the "aim".;
+#X text 591 354 weight value should be between 0 and 1 \, but not 0
+\, and not 1 This will make one slot (whichSlotToPrefer) more likely
+\, but this gradient can be gradual (e.g. 0.02) or extreme (e.g. 0.9)
+as it is a change in the whole value list and affects the likelyhood
+of a markov-chain probability;
+#X text 540 75 0.2 0.5 0.8 1.4 1.7 3.8 9.6;
+#X text 631 88 ^;
+#X text 631 95 |;
+#X text 713 75 <--- list values in sieve;
+#X text 624 110 1.6 ---> random value leads to index location (here
+\, index is 3 \, since the VALUE is between the 3rd and fourth location
+in the list) - but remember the first value in the list is at location
+0;
+#X connect 0 0 3 0;
+#X connect 0 1 4 0;
+#X connect 1 0 15 0;
+#X connect 2 0 0 0;
+#X connect 5 0 0 0;
+#X connect 6 0 0 0;
+#X connect 7 0 0 0;
+#X connect 15 0 0 0;
+#X restore 514 235 pd markovChains;
+#X connect 0 0 6 0;
+#X connect 0 1 7 0;
+#X connect 0 2 8 0;
+#X connect 0 2 18 0;
+#X connect 0 3 9 0;
+#X connect 1 0 0 0;
+#X connect 2 0 0 0;
+#X connect 3 0 0 0;
+#X connect 4 0 0 0;
+#X connect 5 0 0 0;
+#X connect 6 0 11 0;
+#X connect 7 0 12 0;
+#X connect 9 0 10 0;
+#X connect 13 0 0 0;
+#X connect 13 0 18 0;
+#X connect 18 0 29 0;
+#X connect 22 0 0 0;
+#X connect 25 0 0 0;
+#X connect 25 0 29 0;
+#X connect 26 0 27 0;
+#X connect 27 0 0 0;
+#X connect 29 0 16 0;
+#X connect 29 1 17 0;
+#X connect 29 3 19 0;
+#X connect 42 0 3 0;
+#X connect 42 0 43 0;
+#X connect 43 0 5 0;

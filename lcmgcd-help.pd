@@ -1,0 +1,24 @@
+#N canvas 1 74 578 321 10;
+#X declare -path ekext;
+#X obj 85 134 lcmgcd;
+#X floatatom 124 155 5 0 0 3 greatest_common_divisor - -;
+#X floatatom 85 207 0 0 0 3 lowest_common_multiple - -;
+#X msg 37 96 24 6 36 63;
+#X msg 120 96 5 3 7 9;
+#X msg 183 96 30 80 155;
+#X text 119 186 (highest common factor);
+#X msg 258 96 22 42 12 50 36;
+#X text 37 35 Calculates the lowest common multiple and greatest common
+divisor (or highest common factor) of a list of numbers;
+#X text 297 275 Ed Kelly 2014;
+#X msg 360 96 3 5;
+#X msg 395 96 30 25;
+#X obj 300 159 declare -path ekext;
+#X connect 0 0 2 0;
+#X connect 0 1 1 0;
+#X connect 3 0 0 0;
+#X connect 4 0 0 0;
+#X connect 5 0 0 0;
+#X connect 7 0 0 0;
+#X connect 10 0 0 0;
+#X connect 11 0 0 0;
